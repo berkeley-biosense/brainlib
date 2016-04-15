@@ -36,6 +36,11 @@ def binnedPowerSpectra (pspectra,nbin):
     array = np.delete(array,index,0)
     return array
 
+# get the power spectrum
+def spectra (readings):
+  "Parse + calculate the power spectrum for every reading in a list"
+  return [pSpectrum(parse_raw_values(r)) for r in readings]
+
 def avgPowerSpectrum (arrayOfPowerSpectra, modifierFn):
     '''
     get the mean of an array of power spectra, and apply modifierFn to it
@@ -77,3 +82,13 @@ def pinkNoiseCharacterize(pspectrum,normalize=True,plot=False):
         plot(lx[c2],lx[c2]*fit2[0]+fit2[1],'r-')
         
     return {'S':S,'slope1':fit1[0],'slope2':fit2[0]}
+
+# A function we apply to each group of power spectra
+def makeFeatureVector (readings, bins): 
+  '''
+  Create 100, log10-spaced bins for each power spectrum.
+  For more, see http://blog.cosmopol.is/eeg/2015/06/26/pre-processing-EEG-consumer-devices.html
+  '''
+  return avgPowerSpectrum(
+    binnedPowerSpectra(spectra(readings), bins)
+    , np.log10)
