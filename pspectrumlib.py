@@ -39,7 +39,7 @@ def binnedPowerSpectra (pspectra,nbin):
 # get the power spectrum
 def spectra (readings):
   "Parse + calculate the power spectrum for every reading in a list"
-  return [pSpectrum(parse_raw_values(r)) for r in readings]
+  return [pSpectrum(v) for v in readings]
 
 def avgPowerSpectrum (arrayOfPowerSpectra, modifierFn):
     '''
